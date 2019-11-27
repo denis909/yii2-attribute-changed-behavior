@@ -30,7 +30,7 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
 		$currentValues = $event->sender->oldAttributes;
 
-        $eventName = $this->event;
+        $event = $this->event;
 
 		foreach($this->attributes as $attr)
 		{
@@ -48,13 +48,13 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
 					$e->value = $currentValues[$attr];
 
-                    if ($eventName instanceof Closure)
+                    if ($event instanceof Closure)
                     {
-                        $eventName($e);
+                        $event($e);
                     }
                     else
                     {
-					   $this->owner->trigger($eventName, $e);
+					   $this->owner->trigger($event, $e);
                     }
 				}
 			}
