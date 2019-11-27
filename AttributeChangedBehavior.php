@@ -6,12 +6,15 @@
  */
 namespace denis909\yii;
 
+use Closure;
 use yii\db\ActiveRecord;
 
 class AttributeChangedBehavior extends \yii\base\Behavior
 {
 
-	public $attributeEvents = [];
+	public $attributes = [];
+
+    public $event;
 
     public function events()
     {
@@ -27,7 +30,9 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
 		$currentValues = $event->sender->oldAttributes;
 
-		foreach($this->attributeEvents as $attr => $eventName)
+        $eventName = $this->event;
+
+		foreach($this->attributes as $attr)
 		{
 			if (array_key_exists($attr, $oldValues))
 			{
@@ -43,7 +48,14 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
 					$e->value = $currentValues[$attr];
 
-					$this->owner->trigger($eventName, $e);
+                    if ($eventName instanceof Closure)
+                    {
+                        $eventName($e);
+                    }
+                    else
+                    {
+					   $this->owner->trigger($eventName, $e);
+                    }
 				}
 			}
 		}
