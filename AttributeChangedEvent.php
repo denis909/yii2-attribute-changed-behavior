@@ -9,10 +9,10 @@ namespace denis909\yii;
 class AttributeChangedEvent extends \yii\base\Event
 {
 
-	public $attribute;
+    public $attribute;
 
-	public $value;
+    public $value;
 
-	public $oldValue;
+    public $oldValue;
 
 }

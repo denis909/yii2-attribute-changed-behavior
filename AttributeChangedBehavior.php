@@ -12,41 +12,41 @@ use yii\db\ActiveRecord;
 class AttributeChangedBehavior extends \yii\base\Behavior
 {
 
-	public $attributes = [];
+    public $attributes = [];
 
     public $event;
 
     public function events()
     {
-        return [   	
+        return [    
             ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave'
         ];
     }
 
-	public function afterSave($event)
-	{
-		$oldValues = $event->changedAttributes;
+    public function afterSave($event)
+    {
+        $oldValues = $event->changedAttributes;
 
-		$currentValues = $event->sender->oldAttributes;
+        $currentValues = $event->sender->oldAttributes;
 
         $event = $this->event;
 
-		foreach($this->attributes as $attr)
-		{
-			if (array_key_exists($attr, $oldValues))
-			{
-				if ($oldValues[$attr] != $currentValues[$attr])
-				{
-					$e = new AttributeChangedEvent;
+        foreach($this->attributes as $attr)
+        {
+            if (array_key_exists($attr, $oldValues))
+            {
+                if ($oldValues[$attr] != $currentValues[$attr])
+                {
+                    $e = new AttributeChangedEvent;
 
-					$e->sender = $this->owner;
+                    $e->sender = $this->owner;
 
-					$e->attribute = $attr;
+                    $e->attribute = $attr;
 
-					$e->oldValue = $oldValues[$attr];
+                    $e->oldValue = $oldValues[$attr];
 
-					$e->value = $currentValues[$attr];
+                    $e->value = $currentValues[$attr];
 
                     if ($event instanceof Closure)
                     {
@@ -54,11 +54,11 @@ class AttributeChangedBehavior extends \yii\base\Behavior
                     }
                     else
                     {
-					   $this->owner->trigger($event, $e);
+                       $this->owner->trigger($event, $e);
                     }
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
 }
