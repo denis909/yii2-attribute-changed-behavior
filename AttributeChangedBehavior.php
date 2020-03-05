@@ -16,15 +16,35 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
     public $event;
 
+    public $onInsert = true;
+
+    public $onUpdate = true;
+
     public function events()
     {
         return [    
-            ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
-            ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave'
+            ActiveRecord::EVENT_AFTER_INSERT => 'afterInsert',
+            ActiveRecord::EVENT_AFTER_UPDATE => 'afterUpdate'
         ];
     }
 
-    public function afterSave($event)
+    public function afterInsert($event)
+    {
+        if ($this->onInsert)
+        {
+            $this->attributeChanged();
+        }
+    }
+
+    public function afterUpdate($event)
+    {
+        if ($this->onUpdate)
+        {
+            $this->attributeChanged($event);
+        }
+    }
+
+    public function attributeChanged($event)
     {
         $oldValues = $event->changedAttributes;
 
