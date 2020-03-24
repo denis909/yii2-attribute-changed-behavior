@@ -32,7 +32,7 @@ class AttributeChangedBehavior extends \yii\base\Behavior
     {
         if ($this->onInsert)
         {
-            $this->attributeChanged();
+            $this->attributeChanged($event);
         }
     }
 
