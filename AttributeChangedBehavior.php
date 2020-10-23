@@ -74,7 +74,14 @@ class AttributeChangedBehavior extends \yii\base\Behavior
                     }
                     else
                     {
-                       $this->owner->trigger($event, $e);
+                        if (is_callable($event))
+                        {
+                            call_user_func($event, $e);
+                        }
+                        else
+                        {
+                            $this->owner->trigger($event, $e);
+                        }
                     }
                 }
             }
