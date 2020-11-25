@@ -52,37 +52,39 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
         $event = $this->event;
 
-        foreach($this->attributes as $attr)
+        foreach($oldValues as $attr => $value)
         {
-            if (array_key_exists($attr, $oldValues))
+            if (count($this->attributes) > 0)
             {
-                if ($oldValues[$attr] != $currentValues[$attr])
+                if (array_search($attr, $this->attributes) === false)
                 {
-                    $e = new AttributeChangedEvent;
+                    continue;
+                }
+            }
 
-                    $e->sender = $this->owner;
+            $e = new AttributeChangedEvent;
 
-                    $e->attribute = $attr;
+            $e->sender = $this->owner;
 
-                    $e->oldValue = $oldValues[$attr];
+            $e->attribute = $attr;
 
-                    $e->value = $currentValues[$attr];
+            $e->oldValue = $oldValues[$attr];
 
-                    if ($event instanceof Closure)
-                    {
-                        $event($e);
-                    }
-                    else
-                    {
-                        if (is_callable($event))
-                        {
-                            call_user_func($event, $e);
-                        }
-                        else
-                        {
-                            $this->owner->trigger($event, $e);
-                        }
-                    }
+            $e->value = $currentValues[$attr];
+
+            if ($event instanceof Closure)
+            {
+                $event($e);
+            }
+            else
+            {
+                if (is_callable($event))
+                {
+                    call_user_func($event, $e);
+                }
+                else
+                {
+                    $this->owner->trigger($event, $e);
                 }
             }
         }
