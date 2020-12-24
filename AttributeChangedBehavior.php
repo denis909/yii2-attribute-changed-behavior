@@ -54,6 +54,11 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
         foreach($oldValues as $attr => $value)
         {
+            if ($value == $currentValues[$attr])
+            {
+                continue; // attribute not changed
+            }
+
             if (count($this->attributes) > 0)
             {
                 if (array_search($attr, $this->attributes) === false)
