@@ -21,8 +21,6 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
     public $onUpdate = true;
 
-    public $expressionAsString = true;
-
     public function events()
     {
         return [    
