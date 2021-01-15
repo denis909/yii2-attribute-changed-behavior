@@ -8,6 +8,7 @@ namespace denis909\yii;
 
 use Closure;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 class AttributeChangedBehavior extends \yii\base\Behavior
 {
@@ -19,6 +20,8 @@ class AttributeChangedBehavior extends \yii\base\Behavior
     public $onInsert = true;
 
     public $onUpdate = true;
+
+    public $expressionAsString = true;
 
     public function events()
     {
@@ -71,11 +74,11 @@ class AttributeChangedBehavior extends \yii\base\Behavior
 
             $e->sender = $this->owner;
 
-            $e->attribute = $attr;
+            $e->attribute = (string) $attr;
 
-            $e->oldValue = $oldValues[$attr];
+            $e->oldValue = (string) $oldValues[$attr];
 
-            $e->value = $currentValues[$attr];
+            $e->value = (string) $currentValues[$attr];
 
             if ($event instanceof Closure)
             {
